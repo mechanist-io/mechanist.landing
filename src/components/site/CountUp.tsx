@@ -43,7 +43,7 @@ export function ProgressBar({ value, label, valueText }: { value: number; label:
           className="h-full rounded-full bg-[color:var(--brand-orange)]"
           initial={{ width: 0 }}
           animate={inView ? { width: `${value}%` } : {}}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as const }}
         />
       </div>
     </div>

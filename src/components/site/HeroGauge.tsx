@@ -28,7 +28,7 @@ export function HeroGauge() {
           strokeDasharray={c}
           initial={{ strokeDashoffset: c }}
           animate={{ strokeDashoffset: c * (1 - progress) }}
-          transition={{ duration: 1.4, ease: "easeOut" }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] as const }}
         />
 
         {/* tick marks */}

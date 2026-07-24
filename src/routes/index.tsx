@@ -125,7 +125,7 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
         >
           <HeroGauge />
         </motion.div>
@@ -178,7 +178,7 @@ function HowItWorks() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
               className="relative rounded-2xl bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_10px_30px_-15px_rgba(0,0,0,0.15)]"
             >
               <div className="mb-4 grid h-12 w-12 place-items-center rounded-full bg-[color:var(--brand-orange)] text-lg font-extrabold text-white">
@@ -406,7 +406,7 @@ function FAQ() {
                 <motion.div
                   initial={false}
                   animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as const }}
                   style={{ overflow: "hidden" }}
                 >
                   <p className="px-5 pb-5 text-sm leading-7 text-gray-600">{f.a}</p>
