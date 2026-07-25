@@ -37,8 +37,11 @@ jobs:
           GITHUB_PAGES: "true"
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
 
-      - name: SPA fallback for client-side routes
-        run: cp dist/client/index.html dist/client/404.html
+      - name: Prepare GitHub Pages output
+        run: |
+          cp dist/client/index.html dist/client/404.html
+          cp CNAME dist/client/CNAME
+          touch dist/client/.nojekyll
 
       - uses: actions/configure-pages@v5
 

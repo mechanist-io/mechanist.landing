@@ -7,10 +7,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 const isGithubPages = process.env.GITHUB_PAGES === "true";
+// Custom domain (mechanist.ir) serves from /. Override with GITHUB_PAGES_BASE if needed.
+const githubPagesBase = process.env.GITHUB_PAGES_BASE ?? "/";
 
 export default defineConfig({
   vite: {
-    base: isGithubPages ? "/mechanist.landing/" : "/",
+    base: isGithubPages ? githubPagesBase : "/",
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
