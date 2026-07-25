@@ -9,6 +9,9 @@ import {
   Zap,
   ChevronDown,
   ArrowLeft,
+  Bot,
+  CarFront,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -70,7 +73,7 @@ function LandingPage() {
         <HowItWorks />
         <SmartReminder />
         <VehicleDatabase />
-        <GenericMode />
+        <ComingSoon />
         <Benefits />
         <Screenshots />
         <FAQ />
@@ -273,26 +276,95 @@ function VehicleDatabase() {
   );
 }
 
-function GenericMode() {
+function ComingSoonBadge() {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--brand-orange-light)] px-3 py-1 text-xs font-bold text-[color:var(--brand-orange)]">
+      <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--brand-orange)]" />
+      به زودی
+    </span>
+  );
+}
+
+function AiAssistantPreview() {
+  return (
+    <div className="mt-6 space-y-3 rounded-2xl border border-gray-200 bg-white p-4 text-start shadow-sm">
+      <div className="flex justify-end">
+        <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-gray-100 px-3.5 py-2.5 text-xs leading-6 text-gray-800">
+          موقع ترمز گرفتن از جلو صدای سوت میاد و پدال نرم‌تر شده
+        </div>
+      </div>
+      <div className="flex gap-2.5">
+        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black text-white">
+          <Bot size={14} />
+        </div>
+        <div className="min-w-0 flex-1 rounded-2xl rounded-br-md border border-gray-100 bg-gray-50 px-3.5 py-3">
+          <p className="text-[11px] font-bold text-gray-900">علت‌های محتمل</p>
+          <ul className="mt-2 space-y-1.5 text-[11px] leading-5 text-gray-600">
+            <li>• لنت ترمز جلو فرسوده یا روغنی شده</li>
+            <li>• دیسک ترمز خراش‌دار یا تاب‌دار</li>
+            <li>• کمبود مایع ترمز</li>
+          </ul>
+          <div className="mt-3 rounded-xl bg-[color:var(--brand-orange-light)] px-3 py-2">
+            <p className="text-[10px] font-semibold text-[color:var(--brand-orange)]">
+              برآورد هزینه تعمیر
+            </p>
+            <p className="mt-0.5 text-sm font-extrabold text-gray-900">۲ تا ۶ میلیون تومان</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ComingSoon() {
+  const features = [
+    {
+      icon: CarFront,
+      title: "حالت خودروی عمومی",
+      description:
+        "اگه خودروی شما هنوز توی پایگاه داده‌ی ما نیست، به‌زودی می‌تونی برنامه سرویس اون رو خودت به‌صورت دستی تعریف کنی.",
+    },
+    {
+      icon: Sparkles,
+      title: "دستیار هوش مصنوعی تعمیرات",
+      description:
+        "مشکل خودروت رو با زبان ساده توضیح بده؛ هوش مصنوعی علت‌های محتمل رو برات پیدا می‌کنه و یک بازه تقریبی برای هزینه تعمیر نشون می‌ده — قبل از رفتن به مکانیک، بدون چی در انتظارت هست.",
+      preview: <AiAssistantPreview />,
+    },
+  ];
+
   return (
     <section className="py-16 md:py-20">
-      <div className="mx-auto max-w-4xl px-5 md:px-8">
-        <motion.div
-          {...fadeUp}
-          className="relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 p-8 opacity-90 md:p-12"
-        >
-          <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--brand-orange-light)] px-3 py-1 text-xs font-bold text-[color:var(--brand-orange)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--brand-orange)]" />
-            به زودی
-          </span>
-          <h3 className="text-2xl font-extrabold text-gray-900 md:text-3xl">
-            حالت خودروی عمومی
-          </h3>
-          <p className="mt-3 max-w-xl text-gray-600">
-            اگه خودروی شما هنوز توی پایگاه داده‌ی ما نیست، به‌زودی می‌تونی
-            برنامه سرویس اون رو خودت به‌صورت دستی تعریف کنی.
+      <div className="mx-auto max-w-7xl px-5 md:px-8">
+        <motion.div {...fadeUp} className="mx-auto mb-10 max-w-2xl text-center">
+          <ComingSoonBadge />
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
+            ویژگی‌های در راه
+          </h2>
+          <p className="mt-3 text-gray-600">
+            داریم مکانیست رو کامل‌تر می‌کنیم تا علاوه بر پیگیری سرویس، در تشخیص مشکلات هم کنارت باشه.
           </p>
         </motion.div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          {features.map(({ icon: Icon, title, description, preview }, i) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 p-8 md:p-10"
+            >
+              <div className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-black text-white">
+                <Icon size={20} />
+              </div>
+              <h3 className="text-2xl font-extrabold text-gray-900">{title}</h3>
+              <p className="mt-3 text-gray-600">{description}</p>
+              {preview}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
