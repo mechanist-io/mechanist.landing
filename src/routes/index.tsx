@@ -12,6 +12,7 @@ import {
   Bot,
   CarFront,
   Sparkles,
+  Gift,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -94,18 +95,16 @@ function Hero() {
             دستیار هوشمند سرویس خودرو
           </div>
           <h1 className="text-4xl font-extrabold leading-[1.15] tracking-tight md:text-6xl">
-            دیگه هیچوقت سرویس خودروت
+            دیگه هیچوقت سرویس ماشینت
             <br />
-            رو{" "}
             <span className="relative inline-block">
-              فراموش
+              یادت نمیره
               <span className="absolute inset-x-0 -bottom-1 h-3 -z-0 bg-[color:var(--brand-orange-light)]" />
-            </span>{" "}
-            نکن
+            </span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
             مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت،
-            کامیون یا تراکتور شما رو به‌طور خودکار پیگیری می‌کنه — دقیق،
+            کامیون یا تراکتور شما رو به‌طور خودکار بر اساس عمر هر قطعه پیگیری می‌کنه — دقیق،
             ساده و همیشه به‌روز.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -123,6 +122,9 @@ function Hero() {
               بیشتر بدانید
             </a>
           </div>
+          <p className="mt-4 text-sm font-medium text-gray-500">
+            کاملاً رایگان — بدون هزینه اشتراک
+          </p>
         </motion.div>
 
         <motion.div
@@ -372,6 +374,7 @@ function ComingSoon() {
 
 function Benefits() {
   const items = [
+    { icon: Gift, t: "کاملاً رایگان", d: "همه قابلیت‌های مکانیست بدون هزینه اشتراک در دسترسه — همین الان شروع کن." },
     { icon: BellRing, t: "هیچوقت سرویس رو فراموش نکن", d: "یادآوری‌های دقیق و به‌موقع، همیشه یک قدم جلوتر باش." },
     { icon: TrendingUp, t: "عمر خودروت رو افزایش بده", d: "سرویس منظم یعنی خودروی سالم‌تر برای مدت طولانی‌تر." },
     { icon: Wallet, t: "هزینه تعمیرات رو کم کن", d: "پیشگیری همیشه ارزون‌تر از تعمیرات بزرگه." },
@@ -500,7 +503,7 @@ function FinalCTA() {
           همین حالا خیالت از سرویس خودروت راحت بشه
         </motion.h2>
         <motion.p {...fadeUp} className="mt-5 text-gray-400">
-          مکانیست رو دانلود کن و دیگه هیچ سرویسی رو از دست نده.
+          مکانیست رو رایگان دانلود کن و دیگه هیچ سرویسی رو از دست نده.
         </motion.p>
         <motion.div {...fadeUp} className="mt-10">
           <Link
