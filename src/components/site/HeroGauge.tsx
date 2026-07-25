@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 
 export function HeroGauge() {
+  const cx = 150;
+  const cy = 150;
   const radius = 110;
   const c = 2 * Math.PI * radius;
   const progress = 0.68;
@@ -15,16 +17,16 @@ export function HeroGauge() {
         </defs>
 
         {/* outer ring */}
-        <circle cx="150" cy="150" r={radius} stroke="#F4F4F5" strokeWidth="14" fill="none" />
+        <circle cx={cx} cy={cy} r={radius} stroke="#F4F4F5" strokeWidth="14" fill="none" />
         <motion.circle
-          cx="150"
-          cy="150"
+          cx={cx}
+          cy={cy}
           r={radius}
           stroke="#FF8C00"
           strokeWidth="14"
           strokeLinecap="round"
           fill="none"
-          transform="rotate(-90 150 150)"
+          transform={`rotate(-90 ${cx} ${cy})`}
           strokeDasharray={c}
           initial={{ strokeDashoffset: c }}
           animate={{ strokeDashoffset: c * (1 - progress) }}
@@ -34,10 +36,10 @@ export function HeroGauge() {
         {/* tick marks */}
         {Array.from({ length: 40 }).map((_, i) => {
           const a = (i / 40) * Math.PI * 2 - Math.PI / 2;
-          const x1 = 150 + Math.cos(a) * 82;
-          const y1 = 150 + Math.sin(a) * 82;
-          const x2 = 150 + Math.cos(a) * (i % 5 === 0 ? 70 : 76);
-          const y2 = 150 + Math.sin(a) * (i % 5 === 0 ? 70 : 76);
+          const x1 = cx + Math.cos(a) * 82;
+          const y1 = cy + Math.sin(a) * 82;
+          const x2 = cx + Math.cos(a) * (i % 5 === 0 ? 70 : 76);
+          const y2 = cy + Math.sin(a) * (i % 5 === 0 ? 70 : 76);
           return (
             <line
               key={i}
@@ -51,20 +53,22 @@ export function HeroGauge() {
           );
         })}
 
-        {/* center */}
-        <circle cx="150" cy="150" r="52" fill="url(#ring)" />
+        {/* center dial */}
+        <circle cx={cx} cy={cy} r="52" fill="url(#ring)" />
 
-        {/* needle */}
+        {/* needle — SVG-native rotate so pivot stays at dial center (CSS transforms break in RTL) */}
         <motion.g
           initial={{ rotate: -110 }}
           animate={{ rotate: 62 }}
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{ transformOrigin: "150px 150px" }}
+          transformTemplate={({ rotate }) => `rotate(${rotate} ${cx} ${cy})`}
         >
-          <polygon points="150,150 148,60 152,60" fill="#FF8C00" />
-          <circle cx="150" cy="150" r="8" fill="#FF8C00" />
-          <circle cx="150" cy="150" r="3" fill="#000" />
+          <line x1={cx} y1={cy} x2={cx} y2={cy - 82} stroke="#FF8C00" strokeWidth="3" strokeLinecap="round" />
         </motion.g>
+
+        {/* pivot hub — fixed at dial center, drawn on top */}
+        <circle cx={cx} cy={cy} r="8" fill="#FF8C00" />
+        <circle cx={cx} cy={cy} r="3" fill="#000" />
       </svg>
 
       {/* checkpoint timeline */}

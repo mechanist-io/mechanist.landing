@@ -220,11 +220,11 @@ function SmartReminder() {
               </span>
             </div>
             <p className="mt-3 text-sm text-gray-400">
-              تعویض هر ۱۰۰,۰۰۰ کیلومتر یا ۵ سال — هر کدوم زودتر برسه
+              تعویض هر ۶۰,۰۰۰ کیلومتر یا ۵ سال — هر کدوم زودتر برسه
             </p>
 
             <div className="mt-6 space-y-5">
-              <ProgressBar value={72} label="کیلومتر (۷۲,۰۰۰ / ۱۰۰,۰۰۰)" valueText="٪۷۲" />
+              <ProgressBar value={100} label="کیلومتر (۷۲,۰۰۰ / ۶۰,۰۰۰)" valueText="٪۱۲۰" />
               <ProgressBar value={58} label="زمان (۲ سال و ۹ ماه / ۵ سال)" valueText="٪۵۸" />
             </div>
           </div>
