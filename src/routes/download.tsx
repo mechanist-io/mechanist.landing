@@ -12,12 +12,12 @@ export const Route = createFileRoute("/download")({
       { title: "دریافت اپلیکیشن مکانیست" },
       {
         name: "description",
-        content: "ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود مکانیست برات ارسال بشه.",
+        content: "ایمیل یا شماره موبایلت رو وارد کن تا در لیست انتظار مکانیست ثبت‌نام کنی.",
       },
       { property: "og:title", content: "دریافت اپلیکیشن مکانیست" },
       {
         property: "og:description",
-        content: "لینک دانلود اپلیکیشن مکانیست را با ایمیل یا پیامک دریافت کنید.",
+        content: "در لیست انتظار مکانیست ثبت‌نام کن — ۵۰۰ کاربر اول، مادام‌العمر رایگان.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "fa_IR" },
@@ -55,10 +55,10 @@ function DownloadPage() {
     setStatus("loading");
     try {
       const base = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
-      const res = await fetch(`${base}/api/create`, {
+      const res = await fetch(`${base}/api/v1/auth/send-identifier`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ identifier: value.trim() }),
       });
       if (!res.ok) throw new Error("request failed");
       setStatus("success");
@@ -84,20 +84,24 @@ function DownloadPage() {
                   <Check size={28} className="text-[color:var(--brand-success)]" />
                 </div>
                 <h1 className="mt-5 text-2xl font-extrabold tracking-tight">
-                  لینک ارسال شد
+                  به لیست انتظار اضافه شدی
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  لینک با موفقیت ارسال شد. لطفاً ایمیل یا پیامک خودت رو بررسی کن.
+                  مکانیست تا چند روز دیگه منتشر می‌شه. لینک دانلود رو به محض آماده شدن برات ارسال
+                  می‌کنیم — همراه ما بمون!
                 </p>
               </div>
             ) : (
               <>
                 <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                  دریافت اپلیکیشن
+                  عضویت در لیست انتظار
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود یا دعوت‌نامه
-                  برات ارسال بشه.
+                  ایمیل یا شماره موبایلت رو وارد کن تا به لیست انتظار اضافه بشی. لینک دانلود رو به
+                  محض انتشار برات ارسال می‌کنیم.
+                </p>
+                <p className="mt-3 rounded-xl bg-[color:var(--brand-orange-light)] px-4 py-2.5 text-xs font-semibold text-[color:var(--brand-orange)]">
+                  ۵۰۰ کاربر اول، مادام‌العمر رایگان
                 </p>
 
                 {status === "error" && (
@@ -159,7 +163,7 @@ function DownloadPage() {
                         در حال ارسال...
                       </>
                     ) : (
-                      "ارسال لینک"
+                      "ثبت‌نام در لیست انتظار"
                     )}
                   </button>
                 </form>
