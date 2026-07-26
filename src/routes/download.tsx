@@ -5,6 +5,7 @@ import { Check, Loader2, AlertCircle } from "lucide-react";
 
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { API_BASE_URL } from "@/lib/api";
 
 export const Route = createFileRoute("/download")({
   head: () => ({
@@ -54,8 +55,7 @@ function DownloadPage() {
     setFieldError(null);
     setStatus("loading");
     try {
-      const base = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
-      const res = await fetch(`${base}/api/v1/auth/send-identifier`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/auth/send-identifier`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier: value.trim() }),
