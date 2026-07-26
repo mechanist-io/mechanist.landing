@@ -103,9 +103,8 @@ function Hero() {
             </span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-            مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت،
-            کامیون یا تراکتور شما رو به‌طور خودکار بر اساس عمر هر قطعه پیگیری می‌کنه — دقیق،
-            ساده و همیشه به‌روز.
+            مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت، کامیون یا تراکتور شما رو
+            به‌طور خودکار بر اساس عمر هر قطعه پیگیری می‌کنه — دقیق، ساده و همیشه به‌روز.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
@@ -170,9 +169,7 @@ function HowItWorks() {
           <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">
             مکانیست چطور کار می‌کند؟
           </h2>
-          <p className="mt-4 text-gray-600">
-            در ۴ مرحله ساده، خیالت از سرویس خودرو راحت می‌شه
-          </p>
+          <p className="mt-4 text-gray-600">در ۴ مرحله ساده، خیالت از سرویس خودرو راحت می‌شه</p>
         </motion.div>
 
         <div className="relative mt-16 grid gap-8 md:grid-cols-4 md:gap-6">
@@ -208,8 +205,7 @@ function SmartReminder() {
             یادآوری هوشمند، بر اساس کیلومتر و زمان
           </h2>
           <p className="mt-4 max-w-lg text-gray-600">
-            مکانیست همیشه هر دو شرط رو با هم بررسی می‌کنه و هر کدوم زودتر
-            برسه، بهت یادآوری می‌کنه.
+            مکانیست همیشه هر دو شرط رو با هم بررسی می‌کنه و هر کدوم زودتر برسه، بهت یادآوری می‌کنه.
           </p>
         </motion.div>
 
@@ -253,9 +249,8 @@ function VehicleDatabase() {
             پایگاه داده‌ی بزرگ خودروها
           </h2>
           <p className="mt-4 text-gray-600">
-            مکانیست از قبل برنامه سرویس هزاران خودرو، موتورسیکلت، کامیون و
-            تراکتور از برندها و سال‌های مختلف رو داره. کافیه خودروت رو
-            انتخاب کنی — نیازی به تنظیم دستی نیست.
+            مکانیست از قبل برنامه سرویس هزاران خودرو، موتورسیکلت، کامیون و تراکتور از برندها و
+            سال‌های مختلف رو داره. کافیه خودروت رو انتخاب کنی — نیازی به تنظیم دستی نیست.
           </p>
         </motion.div>
 
@@ -344,7 +339,8 @@ function ComingSoon() {
             ویژگی‌های در راه
           </h2>
           <p className="mt-3 text-gray-600">
-            داریم مکانیست رو کامل‌تر می‌کنیم تا علاوه بر پیگیری سرویس، در تشخیص مشکلات هم کنارت باشه.
+            داریم مکانیست رو کامل‌تر می‌کنیم تا علاوه بر پیگیری سرویس، در تشخیص مشکلات هم کنارت
+            باشه.
           </p>
         </motion.div>
 
@@ -374,18 +370,37 @@ function ComingSoon() {
 
 function Benefits() {
   const items = [
-    { icon: Gift, t: "۵۰۰ کاربر اول، مادام‌العمر رایگان", d: "۵۰۰ نفر اول مکانیست رو برای همیشه و بدون هزینه اشتراک استفاده می‌کنن — همین الان جای خودت رو رزرو کن." },
-    { icon: BellRing, t: "هیچوقت سرویس رو فراموش نکن", d: "یادآوری‌های دقیق و به‌موقع، همیشه یک قدم جلوتر باش." },
-    { icon: TrendingUp, t: "عمر خودروت رو افزایش بده", d: "سرویس منظم یعنی خودروی سالم‌تر برای مدت طولانی‌تر." },
+    {
+      icon: Gift,
+      t: "۵۰۰ کاربر اول، مادام‌العمر رایگان",
+      d: "۵۰۰ نفر اول مکانیست رو برای همیشه و بدون هزینه اشتراک استفاده می‌کنن — همین الان جای خودت رو رزرو کن.",
+    },
+    {
+      icon: BellRing,
+      t: "هیچوقت سرویس رو فراموش نکن",
+      d: "یادآوری‌های دقیق و به‌موقع، همیشه یک قدم جلوتر باش.",
+    },
+    {
+      icon: TrendingUp,
+      t: "عمر خودروت رو افزایش بده",
+      d: "سرویس منظم یعنی خودروی سالم‌تر برای مدت طولانی‌تر.",
+    },
     { icon: Wallet, t: "هزینه تعمیرات رو کم کن", d: "پیشگیری همیشه ارزون‌تر از تعمیرات بزرگه." },
     { icon: History, t: "تاریخچه کامل سرویس", d: "تمام سرویس‌های انجام‌شده رو در یک‌جا نگه دار." },
-    { icon: Clock, t: "یادآوری خودکار", d: "بدون نیاز به یادداشت یا حافظه، مکانیست یادت می‌ندازه." },
+    {
+      icon: Clock,
+      t: "یادآوری خودکار",
+      d: "بدون نیاز به یادداشت یا حافظه، مکانیست یادت می‌ندازه.",
+    },
     { icon: Zap, t: "ساده و سریع", d: "چند لحظه برای ثبت کیلومتر، خیالت تمام سال راحت." },
   ];
   return (
     <section id="features" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <motion.h2 {...fadeUp} className="text-center text-3xl font-extrabold tracking-tight md:text-5xl">
+        <motion.h2
+          {...fadeUp}
+          className="text-center text-3xl font-extrabold tracking-tight md:text-5xl"
+        >
           چرا مکانیست؟
         </motion.h2>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -416,12 +431,8 @@ function Screenshots() {
     <section className="border-t border-gray-100 bg-gradient-to-b from-gray-50 to-white py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.div {...fadeUp} className="mx-auto mb-12 max-w-2xl text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">
-            نگاهی به اپلیکیشن
-          </h2>
-          <p className="mt-4 text-gray-600">
-            رابط تمیز و سریع، طراحی‌شده برای استفاده روزمره
-          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">نگاهی به اپلیکیشن</h2>
+          <p className="mt-4 text-gray-600">رابط تمیز و سریع، طراحی‌شده برای استفاده روزمره</p>
         </motion.div>
         <PhoneMockups />
       </div>
@@ -457,7 +468,10 @@ function FAQ() {
   return (
     <section id="faq" className="py-20 md:py-28">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
-        <motion.h2 {...fadeUp} className="text-center text-3xl font-extrabold tracking-tight md:text-5xl">
+        <motion.h2
+          {...fadeUp}
+          className="text-center text-3xl font-extrabold tracking-tight md:text-5xl"
+        >
           سوالات متداول
         </motion.h2>
         <div className="mt-12 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white">
@@ -503,7 +517,7 @@ function FinalCTA() {
           همین حالا خیالت از سرویس خودروت راحت بشه
         </motion.h2>
         <motion.p {...fadeUp} className="mt-5 text-gray-400">
-          در لیست انتظار ثبت‌نام کن — ۵۰۰ کاربر اول، مادام‌العمر رایگان.
+          مکانیست رو دانلود کن — ۵۰۰ کاربر اول، مادام‌العمر رایگان.
         </motion.p>
         <motion.div {...fadeUp} className="mt-10">
           <Link

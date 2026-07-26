@@ -12,12 +12,12 @@ export const Route = createFileRoute("/download")({
       { title: "دریافت اپلیکیشن مکانیست" },
       {
         name: "description",
-        content: "ایمیل یا شماره موبایلت رو وارد کن تا در لیست انتظار مکانیست ثبت‌نام کنی.",
+        content: "ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود مکانیست برات ارسال بشه.",
       },
       { property: "og:title", content: "دریافت اپلیکیشن مکانیست" },
       {
         property: "og:description",
-        content: "در لیست انتظار مکانیست ثبت‌نام کن — ۵۰۰ کاربر اول، مادام‌العمر رایگان.",
+        content: "لینک دانلود اپلیکیشن مکانیست را با ایمیل یا پیامک دریافت کنید.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "fa_IR" },
@@ -84,24 +84,20 @@ function DownloadPage() {
                   <Check size={28} className="text-[color:var(--brand-success)]" />
                 </div>
                 <h1 className="mt-5 text-2xl font-extrabold tracking-tight">
-                  به لیست انتظار اضافه شدی
+                  در لیست انتظار ثبت‌نام کردی
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  مکانیست تا چند روز دیگه منتشر می‌شه. لینک دانلود رو به محض آماده شدن برات ارسال
-                  می‌کنیم — همراه ما بمون!
+                  مکانیست هنوز منتشر نشده — ولی جای تو رو نگه داشتیم. تا چند روز دیگه منتشر می‌شه و
+                  لینک دانلود رو برات می‌فرستیم. همراه ما بمون!
                 </p>
               </div>
             ) : (
               <>
                 <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                  عضویت در لیست انتظار
+                  دریافت اپلیکیشن
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  ایمیل یا شماره موبایلت رو وارد کن تا به لیست انتظار اضافه بشی. لینک دانلود رو به
-                  محض انتشار برات ارسال می‌کنیم.
-                </p>
-                <p className="mt-3 rounded-xl bg-[color:var(--brand-orange-light)] px-4 py-2.5 text-xs font-semibold text-[color:var(--brand-orange)]">
-                  ۵۰۰ کاربر اول، مادام‌العمر رایگان
+                  ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود برات ارسال بشه.
                 </p>
 
                 {status === "error" && (
@@ -163,7 +159,7 @@ function DownloadPage() {
                         در حال ارسال...
                       </>
                     ) : (
-                      "ثبت‌نام در لیست انتظار"
+                      "ارسال لینک"
                     )}
                   </button>
                 </form>
