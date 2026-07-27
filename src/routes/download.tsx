@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Check, Loader2, AlertCircle } from "lucide-react";
+import { Check, Loader2, AlertCircle, Globe } from "lucide-react";
 
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { API_BASE_URL } from "@/lib/api";
+import { checkIranIp, type IpCheckResult } from "@/lib/ip-check";
 
 export const Route = createFileRoute("/download")({
   head: () => ({
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/download")({
 });
 
 type Status = "idle" | "loading" | "success" | "error";
+type GeoStatus = "checking" | IpCheckResult["status"];
 
 const phoneRe = /^09\d{9}$/;
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +39,25 @@ function DownloadPage() {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [fieldError, setFieldError] = useState<string | null>(null);
+  const [geoStatus, setGeoStatus] = useState<GeoStatus>("checking");
+  const [blockedCountry, setBlockedCountry] = useState<string | undefined>();
+
+  const runGeoCheck = () => {
+    setGeoStatus("checking");
+    void checkIranIp().then((result) => {
+      if (result.status === "blocked") {
+        setBlockedCountry(result.country);
+        setGeoStatus("blocked");
+        return;
+      }
+      setBlockedCountry(undefined);
+      setGeoStatus(result.status);
+    });
+  };
+
+  useEffect(() => {
+    runGeoCheck();
+  }, []);
 
   const detect = (v: string): { email?: string; phoneNumber?: string } | null => {
     const t = v.trim();
@@ -47,6 +68,7 @@ function DownloadPage() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (geoStatus === "blocked") return;
     const payload = detect(value);
     if (!payload) {
       setFieldError("لطفاً یک ایمیل یا شماره موبایل معتبر وارد کن");
@@ -90,6 +112,33 @@ function DownloadPage() {
                   مکانیست هنوز منتشر نشده — ولی جای تو رو نگه داشتیم. تا چند روز دیگه منتشر می‌شه و
                   لینک دانلود رو برات می‌فرستیم. همراه ما بمون!
                 </p>
+              </div>
+            ) : geoStatus === "checking" ? (
+              <div className="text-center">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gray-100">
+                  <Loader2 size={28} className="animate-spin text-gray-500" />
+                </div>
+                <h1 className="mt-5 text-2xl font-extrabold tracking-tight">لطفاً صبر کن</h1>
+                <p className="mt-3 text-sm leading-7 text-gray-600">در حال بررسی اتصال...</p>
+              </div>
+            ) : geoStatus === "blocked" ? (
+              <div className="text-center">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber-50">
+                  <Globe size={28} className="text-amber-600" />
+                </div>
+                <h1 className="mt-5 text-2xl font-extrabold tracking-tight">VPN رو خاموش کن</h1>
+                <p className="mt-3 text-sm leading-7 text-gray-600">
+                  به نظر می‌رسه از خارج از ایران
+                  {blockedCountry ? ` (${blockedCountry})` : ""} یا با VPN وصل شدی. برای ثبت‌نام،
+                  VPN رو خاموش کن و دوباره امتحان کن.
+                </p>
+                <button
+                  type="button"
+                  onClick={runGeoCheck}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50"
+                >
+                  دوباره امتحان کن
+                </button>
               </div>
             ) : (
               <>
