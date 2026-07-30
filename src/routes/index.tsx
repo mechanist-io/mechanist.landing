@@ -20,6 +20,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { HeroGauge } from "@/components/site/HeroGauge";
 import { PhoneMockups } from "@/components/site/PhoneMockups";
+import { CustomizeParts } from "@/components/site/CustomizeParts";
 import { CountUp, ProgressBar } from "@/components/site/CountUp";
 
 export const Route = createFileRoute("/")({
@@ -74,6 +75,7 @@ function LandingPage() {
         <HowItWorks />
         <SmartReminder />
         <VehicleDatabase />
+        <CustomizeParts />
         <ComingSoon />
         <Benefits />
         <Screenshots />
