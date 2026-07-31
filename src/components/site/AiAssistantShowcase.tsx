@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Bot, SendHorizontal, Sparkles } from "lucide-react";
 
 type ChatMessage = {
@@ -10,23 +10,27 @@ type ChatMessage = {
 
 const conversation = [
   {
-    user: "میخوام لاستیک برای ماشینم بگیرم به چه چیزایی باید توجه کنم و چی پیشنهاد میدی بگیرم",
+    user: "میخوام لاستیک برای ماشینم بگیرم، چی پیشنهاد میدی؟",
     assistant:
-      "خیلی هم عالی برای همین ماشین ۲۰۶  تیپ ۲ مدل ۱۳۹۹ میخوای بگیری؟\nاگه بهم بگی بودجه چقدر داری و سایز لاستیک فعلی چنده بهتر میتونم کمکت کنم.",
-    readingTime: 5600,
+      "برای ۲۰۶ تیپ ۲ مدل ۱۳۹۹؟\nاگه بودجه و سایز فعلی رو بگی، دقیق‌تر پیشنهاد می‌دم.",
+    readingTime: 4200,
   },
   {
-    user:
-      "اره برای ۲۰۶ میخوام تا ۵۰ تومن پول دارم\nسایز لاستیک رو نمیدونم از کجا باید پیدا کنم.",
-    assistant:
-      "برای پژو ۲۰۶ تیپ ۲ مدل ۱۳۹۹ اگر رینگ فابریک باشه، سایز استاندارد معمولاً 185/65 R14 هست. قبل از خرید فقط یک بار روی دیواره لاستیکت رو چک کن که همین سایز باشه.\n\nHankook Kinergy Eco2 K435 185/65R14\nقیمت واقع‌بینانه: حدود ۲۰ تا ۲۴ میلیون تومان برای چهار حلقه\n(قیمت ۱۹.۹۵ میلیون پایین‌ترین آگهیه؛ من هم مثل خودت قیمت‌های بالاتر را ملاک قرار می‌دهم.)\n\nHankook K435 185/65R14\nحدود ۲۴ میلیون تومان\n\nبعضی فروشنده‌ها قیمت را برای یک حلقه می‌نویسند و بعضی برای دو حلقه یا چهار حلقه. قبل از خرید حتماً این مورد را چک کن، چون ممکن است اختلاف ظاهری قیمت فقط به خاطر تعداد حلقه‌ها باشد.\n\nبیشتر رانندگیت داخل شهره یا جاده هم زیاد میری؟\nاگر مثلاً ماهی چند بار جاده می‌ری، ممکنه مدلی رو پیشنهاد بدم که ترمزگیری و پایداری بهتری در سرعت‌های بالا داشته باشه.",
-    readingTime: 17000,
+    user: "اره، تا ۵۰ تومن. سایز رو نمی‌دونم.",
+    assistant: "رینگ اسپورت داره ماشین؟",
+    readingTime: 3200,
   },
   {
-    user: "موقع خرید به چه نکته هایی باید توجه کنم که کلاه سرم نره",
+    user: "نه لاستیک فابریک روی ماشینه",
     assistant:
-      "چک‌لیست خرید لاستیک برای ۲۰۶ تیپ ۲:\n\n☐ سایز: 185/65R14 (قبل از خرید روی لاستیک فعلی چک کن)\n☐ هر ۴ حلقه یک برند و یک مدل باشند.\n☐ تاریخ تولید: ترجیحاً 2025 یا 2026 چون لاستیک ها تاریخ مصرف دارند.\n☐ هر ۴ حلقه تاریخ تولید نزدیک به هم داشته باشند.\n☐ کشور سازنده را بپرس.\n☐ دیواره لاستیک بدون ترک، بریدگی یا بادکردگی باشد.\n☐ لاستیک نو و بدون پنچرگیری یا تعمیر باشد.\n☐ قیمت را شفاف بپرس: برای ۴ حلقه یا هر حلقه؟ هزینه تعویض لاستیک چقدره؟\n☐ گارانتی یا ضمانت اصالت داشته باشد.\n☐ بعد از نصب، بالانس انجام شود.\n☐ در صورت نیاز، تنظیم فرمان (Alignment) انجام شود.\n☐ فاکتور رسمی با مشخصات لاستیک بگیر.\n\nبرندهایی که پیشنهاد می‌کنم:\n🇰🇷 هانکوک (Hankook K435)\n🇫🇷 میشلن (Michelin)\n🇮🇷 بارز\n🇮🇷 یزد تایر\n\nاگر Kinergy Eco2 K435 خریدی، حتماً روی دیواره لاستیک عبارت Hankook و Kinergy Eco2 K435 و کد DOT به‌صورت برجسته و با کیفیت حک شده باشد. چاپ بی‌کیفیت، غلط املایی یا حکاکی نامنظم می‌تواند نشانه تقلبی بودن یا کیفیت پایین محصول باشد.",
-    readingTime: 19000,
+      "پس سایز استاندارد معمولاً 185/65 R14 هست — قبل از خرید روی دیواره لاستیک چک کن.\n\nپیشنهاد من:\nHankook Kinergy Eco2 K435\nحدود ۲۰ تا ۲۴ میلیون برای ۴ حلقه\n\nبعضی فروشنده‌ها قیمت رو برای ۱ حلقه می‌نویسن؛ حتماً بپرس برای چند حلقه‌ست.",
+    readingTime: 9000,
+  },
+  {
+    user: "موقع خرید چی چک کنم که کلاه سرم نره؟",
+    assistant:
+      "چک‌لیست سریع:\n☐ سایز 185/65R14\n☐ هر ۴ حلقه یک برند و مدل\n☐ تاریخ تولید ۲۰۲۵ یا ۲۰۲۶\n☐ قیمت شفاف: ۴ حلقه یا تک؟\n☐ گارانتی اصالت + فاکتور رسمی\n☐ بعد از نصب، بالانس\n\nبرندهای پیشنهادی: هانکوک، میشلن، بارز، یزد تایر",
+    readingTime: 8500,
   },
 ] as const;
 
@@ -71,6 +75,8 @@ function ChatBubble({ message }: { message: ChatMessage }) {
 
 function AiChatPhone() {
   const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(rootRef, { amount: 0.45 });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -82,6 +88,14 @@ function AiChatPhone() {
         { id: 1, role: "user", text: conversation[0].user },
         { id: 2, role: "assistant", text: conversation[0].assistant },
       ]);
+      return;
+    }
+
+    if (!inView) {
+      setMessages([]);
+      setDraft("");
+      setIsThinking(false);
+      messagesRef.current?.scrollTo({ top: 0 });
       return;
     }
 
@@ -226,15 +240,18 @@ function AiChatPhone() {
       timers.forEach(window.clearTimeout);
       window.cancelAnimationFrame(rafId);
     };
-  }, [reduceMotion]);
+  }, [inView, reduceMotion]);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-[340px] justify-center [perspective:1400px]">
+    <div
+      ref={rootRef}
+      className="relative mx-auto flex w-full max-w-[340px] justify-center [perspective:1400px]"
+    >
       <div className="pointer-events-none absolute bottom-2 h-8 w-[70%] rounded-[100%] bg-black/20 blur-xl" />
       <motion.div
         className="relative origin-center"
         animate={
-          reduceMotion
+          reduceMotion || !inView
             ? undefined
             : {
                 // Opposite yaw from CustomizeParts so the two mockups feel distinct.

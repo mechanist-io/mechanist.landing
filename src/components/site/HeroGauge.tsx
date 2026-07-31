@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, type AnimationPlaybackControls } from "framer-motion";
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  type AnimationPlaybackControls,
+} from "framer-motion";
 import { Check, Droplet, Gauge, Wrench } from "lucide-react";
 
 type Ease = "easeOut" | "easeInOut" | "linear";
@@ -54,6 +60,8 @@ export function HeroGauge() {
   const sweep = 240;
   const arcFraction = sweep / 360;
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(rootRef, { amount: 0.4 });
   const progress = useMotionValue(0);
   const needleRef = useRef<SVGGElement>(null);
   const arcRef = useRef<SVGCircleElement>(null);
@@ -83,6 +91,15 @@ export function HeroGauge() {
 
   // Orchestrate: steady gauge → click each task → run matching rev → reset & loop.
   useEffect(() => {
+    if (!inView) {
+      setChecked([false, false, false]);
+      setCursor(CURSOR_REST);
+      setPressing(false);
+      progress.set(0);
+      revControls.current?.stop();
+      return;
+    }
+
     let cancelled = false;
     let timers: number[] = [];
     const wait = (ms: number) =>
@@ -137,10 +154,10 @@ export function HeroGauge() {
       timers.forEach(clearTimeout);
       revControls.current?.stop();
     };
-  }, []);
+  }, [inView, progress]);
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-md">
+    <div ref={rootRef} className="relative mx-auto aspect-square w-full max-w-md">
       <svg ref={shakeRef} viewBox="0 0 300 300" className="h-full w-full">
         <defs>
           <linearGradient id="ring" x1="0" x2="1" y1="0" y2="1">

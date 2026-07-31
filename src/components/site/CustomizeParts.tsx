@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, Droplet, Gauge, Minus, Plus, Wrench } from "lucide-react";
 
 const PARTS = [
@@ -174,6 +174,8 @@ function CustomizePhoneScreen({
 }
 
 function Phone3D() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(rootRef, { amount: 0.45 });
   const [screen, setScreen] = useState<Screen>("list");
   const [selected, setSelected] = useState(-1);
   const [km, setKm] = useState(KM_STEPS[0]);
@@ -183,6 +185,17 @@ function Phone3D() {
   const [pressing, setPressing] = useState(false);
 
   useEffect(() => {
+    if (!inView) {
+      setScreen("list");
+      setSelected(-1);
+      setKm(KM_STEPS[0]);
+      setMonths(MONTH_STEPS[0]);
+      setHighlight(null);
+      setCursor({ x: 200, y: 480 });
+      setPressing(false);
+      return;
+    }
+
     let cancelled = false;
     let timers: number[] = [];
     const wait = (ms: number) =>
@@ -266,20 +279,27 @@ function Phone3D() {
       cancelled = true;
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [inView]);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-[340px] justify-center [perspective:1400px]">
+    <div
+      ref={rootRef}
+      className="relative mx-auto flex w-full max-w-[340px] justify-center [perspective:1400px]"
+    >
       {/* soft floor shadow */}
       <div className="pointer-events-none absolute bottom-2 h-8 w-[70%] rounded-[100%] bg-black/20 blur-xl" />
 
       <motion.div
         className="relative origin-center"
-        animate={{
-          rotateY: [-12, -8, -12],
-          rotateX: [5, 3, 5],
-          y: [0, -10, 0],
-        }}
+        animate={
+          inView
+            ? {
+                rotateY: [-12, -8, -12],
+                rotateX: [5, 3, 5],
+                y: [0, -10, 0],
+              }
+            : undefined
+        }
         transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
       >
         <div className="relative w-[260px] shrink-0 rounded-[2.5rem] border-[10px] border-black bg-black p-1 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.45)]">
