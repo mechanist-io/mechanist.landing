@@ -21,6 +21,7 @@ import { Footer } from "@/components/site/Footer";
 import { HeroGauge } from "@/components/site/HeroGauge";
 import { PhoneMockups } from "@/components/site/PhoneMockups";
 import { CustomizeParts } from "@/components/site/CustomizeParts";
+import { AiAssistantShowcase } from "@/components/site/AiAssistantShowcase";
 import { CountUp, ProgressBar } from "@/components/site/CountUp";
 
 export const Route = createFileRoute("/")({
@@ -77,6 +78,7 @@ function LandingPage() {
         <VehicleDatabase />
         <CustomizeParts />
         <ComingSoon />
+        <AiAssistantShowcase />
         <Benefits />
         <Screenshots />
         <FAQ />
