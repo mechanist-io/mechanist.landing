@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
+import { trackDownloadCtaClick } from "@/lib/analytics";
 import { Logo } from "./Logo";
 
 const navLinks = [
@@ -46,6 +47,7 @@ export function Header() {
         <div className="hidden md:block">
           <Link
             to="/download"
+            onClick={() => trackDownloadCtaClick("header")}
             className="inline-flex items-center rounded-lg border-[1.5px] border-black bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-black hover:text-white"
           >
             دانلود اپلیکیشن
@@ -77,7 +79,10 @@ export function Header() {
             ))}
             <Link
               to="/download"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                trackDownloadCtaClick("header_mobile");
+                setOpen(false);
+              }}
               className="mt-2 inline-flex items-center justify-center rounded-lg border-[1.5px] border-black bg-white px-4 py-3 text-sm font-semibold text-black"
             >
               دانلود اپلیکیشن

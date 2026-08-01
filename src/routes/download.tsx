@@ -6,6 +6,10 @@ import { Check, Loader2, AlertCircle, Globe } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { API_BASE_URL } from "@/lib/api";
+import {
+  trackDownloadSignupSuccess,
+  trackDownloadVpnBlocked,
+} from "@/lib/analytics";
 import { checkIranIp, type IpCheckResult } from "@/lib/ip-check";
 
 export const Route = createFileRoute("/download")({
@@ -48,6 +52,7 @@ function DownloadPage() {
       if (result.status === "blocked") {
         setBlockedCountry(result.country);
         setGeoStatus("blocked");
+        trackDownloadVpnBlocked(result.country);
         return;
       }
       setBlockedCountry(undefined);
@@ -84,6 +89,7 @@ function DownloadPage() {
       });
       if (!res.ok) throw new Error("request failed");
       setStatus("success");
+      trackDownloadSignupSuccess(payload.email ? "email" : "phone");
     } catch {
       setStatus("error");
     }

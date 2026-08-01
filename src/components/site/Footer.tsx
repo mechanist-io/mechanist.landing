@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { trackDownloadCtaClick } from "@/lib/analytics";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -23,7 +24,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/download" className="hover:text-white">
+              <Link
+                to="/download"
+                onClick={() => trackDownloadCtaClick("footer")}
+                className="hover:text-white"
+              >
                 دانلود اپلیکیشن
               </Link>
             </li>

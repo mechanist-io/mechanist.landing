@@ -23,6 +23,7 @@ import { PhoneMockups } from "@/components/site/PhoneMockups";
 import { CustomizeParts } from "@/components/site/CustomizeParts";
 import { AiAssistantShowcase } from "@/components/site/AiAssistantShowcase";
 import { CountUp, ProgressBar } from "@/components/site/CountUp";
+import { trackDownloadCtaClick } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -113,6 +114,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               to="/download"
+              onClick={() => trackDownloadCtaClick("hero")}
               className="inline-flex items-center gap-2 rounded-xl bg-[color:var(--brand-orange)] px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_30px_-10px_rgba(255,140,0,0.6)] transition-all hover:-translate-y-0.5 hover:bg-[color:var(--brand-orange-hover)]"
             >
               دانلود اپلیکیشن
@@ -526,6 +528,7 @@ function FinalCTA() {
         <motion.div {...fadeUp} className="mt-10">
           <Link
             to="/download"
+            onClick={() => trackDownloadCtaClick("final_cta")}
             className="inline-flex items-center gap-2 rounded-xl bg-[color:var(--brand-orange)] px-8 py-4 text-base font-bold text-white shadow-[0_20px_60px_-15px_rgba(255,140,0,0.7)] transition-all hover:-translate-y-0.5 hover:bg-[color:var(--brand-orange-hover)]"
           >
             دانلود اپلیکیشن
