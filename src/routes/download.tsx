@@ -7,8 +7,18 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { API_BASE_URL } from "@/lib/api";
 import {
+  trackDownloadFormSubmit,
+  trackDownloadFormValidationError,
+  trackDownloadGeoAllowed,
+  trackDownloadGeoCheckLatency,
+  trackDownloadGeoUnknown,
+  trackDownloadIdentifierType,
+  trackDownloadPageView,
+  trackDownloadSignupError,
+  trackDownloadSignupLatency,
   trackDownloadSignupSuccess,
   trackDownloadVpnBlocked,
+  trackDownloadVpnRetry,
 } from "@/lib/analytics";
 import { checkIranIp, type IpCheckResult } from "@/lib/ip-check";
 
@@ -46,9 +56,12 @@ function DownloadPage() {
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("checking");
   const [blockedCountry, setBlockedCountry] = useState<string | undefined>();
 
-  const runGeoCheck = () => {
+  const runGeoCheck = (isRetry = false) => {
+    if (isRetry) trackDownloadVpnRetry();
     setGeoStatus("checking");
+    const started = performance.now();
     void checkIranIp().then((result) => {
+      trackDownloadGeoCheckLatency(performance.now() - started);
       if (result.status === "blocked") {
         setBlockedCountry(result.country);
         setGeoStatus("blocked");
@@ -57,11 +70,14 @@ function DownloadPage() {
       }
       setBlockedCountry(undefined);
       setGeoStatus(result.status);
+      if (result.status === "iran") trackDownloadGeoAllowed();
+      else trackDownloadGeoUnknown();
     });
   };
 
   useEffect(() => {
-    runGeoCheck();
+    trackDownloadPageView();
+    runGeoCheck(false);
   }, []);
 
   const detect = (v: string): { email?: string; phoneNumber?: string } | null => {
@@ -77,21 +93,34 @@ function DownloadPage() {
     const payload = detect(value);
     if (!payload) {
       setFieldError("لطفاً یک ایمیل یا شماره موبایل معتبر وارد کن");
+      trackDownloadFormValidationError("invalid_identifier");
+      trackDownloadIdentifierType("invalid");
       return;
     }
+    const method = payload.email ? "email" : "phone";
     setFieldError(null);
     setStatus("loading");
+    trackDownloadFormSubmit(method);
+    trackDownloadIdentifierType(method);
+    const started = performance.now();
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/auth/send-identifier`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier: value.trim() }),
       });
-      if (!res.ok) throw new Error("request failed");
+      trackDownloadSignupLatency(performance.now() - started);
+      if (!res.ok) {
+        trackDownloadSignupError(res.status);
+        setStatus("error");
+        return;
+      }
       setStatus("success");
-      trackDownloadSignupSuccess(payload.email ? "email" : "phone");
+      trackDownloadSignupSuccess(method);
     } catch {
+      trackDownloadSignupLatency(performance.now() - started);
       setStatus("error");
+      trackDownloadSignupError();
     }
   };
 
@@ -140,7 +169,7 @@ function DownloadPage() {
                 </p>
                 <button
                   type="button"
-                  onClick={runGeoCheck}
+                  onClick={() => runGeoCheck(true)}
                   className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50"
                 >
                   دوباره امتحان کن
@@ -182,9 +211,15 @@ function DownloadPage() {
                         if (status === "error") setStatus("idle");
                       }}
                       onBlur={() => {
-                        if (value && !detect(value)) {
+                        if (!value) return;
+                        const payload = detect(value);
+                        if (!payload) {
                           setFieldError("لطفاً یک ایمیل یا شماره موبایل معتبر وارد کن");
+                          trackDownloadFormValidationError("blur_invalid_identifier");
+                          trackDownloadIdentifierType("invalid");
+                          return;
                         }
+                        trackDownloadIdentifierType(payload.email ? "email" : "phone");
                       }}
                       aria-invalid={fieldError ? "true" : "false"}
                       aria-describedby={fieldError ? "contact-error" : undefined}

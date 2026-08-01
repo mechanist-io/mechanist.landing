@@ -23,7 +23,8 @@ import { PhoneMockups } from "@/components/site/PhoneMockups";
 import { CustomizeParts } from "@/components/site/CustomizeParts";
 import { AiAssistantShowcase } from "@/components/site/AiAssistantShowcase";
 import { CountUp, ProgressBar } from "@/components/site/CountUp";
-import { trackDownloadCtaClick } from "@/lib/analytics";
+import { MockupView, SectionView } from "@/components/site/AnalyticsRuntime";
+import { trackDownloadCtaClick, trackFaqOpen, trackHeroCtaSecondary } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -92,7 +93,7 @@ function LandingPage() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <SectionView id="hero" as="section" className="relative overflow-hidden">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pt-14 pb-24 md:grid-cols-2 md:px-8 md:pt-24 md:pb-32">
         <motion.div {...fadeUp}>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-[color:var(--brand-orange-light)] px-3 py-1 text-xs font-semibold text-[color:var(--brand-orange)]">
@@ -122,6 +123,7 @@ function Hero() {
             </Link>
             <a
               href="#how-it-works"
+              onClick={() => trackHeroCtaSecondary()}
               className="inline-flex items-center rounded-xl border-[1.5px] border-black bg-white px-6 py-3.5 text-sm font-semibold text-black transition-all hover:bg-black hover:text-white"
             >
               بیشتر بدانید
@@ -137,10 +139,12 @@ function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
         >
-          <HeroGauge />
+          <MockupView id="hero-gauge">
+            <HeroGauge />
+          </MockupView>
         </motion.div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
@@ -169,8 +173,12 @@ function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="border-t border-gray-100 bg-gray-50 py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+    <SectionView
+      id="how-it-works"
+      as="section"
+      className="border-t border-gray-100 bg-gray-50 py-20 md:py-28"
+    >
+      <div id="how-it-works" className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">
             مکانیست چطور کار می‌کند؟
@@ -198,13 +206,13 @@ function HowItWorks() {
           ))}
         </div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
 function SmartReminder() {
   return (
-    <section className="py-20 md:py-28">
+    <SectionView id="smart-reminder" as="section" className="py-20 md:py-28">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 md:grid-cols-2 md:px-8">
         <motion.div {...fadeUp}>
           <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
@@ -237,7 +245,7 @@ function SmartReminder() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
@@ -248,7 +256,11 @@ function VehicleDatabase() {
     { to: 5, label: "دسته وسیله نقلیه" },
   ];
   return (
-    <section className="border-y border-gray-100 bg-gray-50 py-20 md:py-28">
+    <SectionView
+      id="vehicle-database"
+      as="section"
+      className="border-y border-gray-100 bg-gray-50 py-20 md:py-28"
+    >
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">
@@ -275,7 +287,7 @@ function VehicleDatabase() {
           ))}
         </div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
@@ -337,7 +349,7 @@ function ComingSoon() {
   ];
 
   return (
-    <section className="py-16 md:py-20">
+    <SectionView id="coming-soon" as="section" className="py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.div {...fadeUp} className="mx-auto mb-10 max-w-2xl text-center">
           <ComingSoonBadge />
@@ -370,7 +382,7 @@ function ComingSoon() {
           ))}
         </div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
@@ -401,8 +413,8 @@ function Benefits() {
     { icon: Zap, t: "ساده و سریع", d: "چند لحظه برای ثبت کیلومتر، خیالت تمام سال راحت." },
   ];
   return (
-    <section id="features" className="py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+    <SectionView id="features" as="section" className="py-20 md:py-28">
+      <div id="features" className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.h2
           {...fadeUp}
           className="text-center text-3xl font-extrabold tracking-tight md:text-5xl"
@@ -428,21 +440,27 @@ function Benefits() {
           ))}
         </div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
 function Screenshots() {
   return (
-    <section className="border-t border-gray-100 bg-gradient-to-b from-gray-50 to-white py-20 md:py-28">
+    <SectionView
+      id="screenshots"
+      as="section"
+      className="border-t border-gray-100 bg-gradient-to-b from-gray-50 to-white py-20 md:py-28"
+    >
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <motion.div {...fadeUp} className="mx-auto mb-12 max-w-2xl text-center">
           <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">نگاهی به اپلیکیشن</h2>
           <p className="mt-4 text-gray-600">رابط تمیز و سریع، طراحی‌شده برای استفاده روزمره</p>
         </motion.div>
-        <PhoneMockups />
+        <MockupView id="screenshots">
+          <PhoneMockups />
+        </MockupView>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
@@ -471,9 +489,10 @@ const faqs = [
 
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+
   return (
-    <section id="faq" className="py-20 md:py-28">
-      <div className="mx-auto max-w-3xl px-5 md:px-8">
+    <SectionView id="faq" as="section" className="py-20 md:py-28">
+      <div id="faq" className="mx-auto max-w-3xl px-5 md:px-8">
         <motion.h2
           {...fadeUp}
           className="text-center text-3xl font-extrabold tracking-tight md:text-5xl"
@@ -487,7 +506,10 @@ function FAQ() {
               <div key={f.q}>
                 <button
                   type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
+                  onClick={() => {
+                    if (!isOpen) trackFaqOpen(f.q, i);
+                    setOpen(isOpen ? null : i);
+                  }}
                   className="flex w-full items-center justify-between gap-4 px-5 py-5 text-start"
                   aria-expanded={isOpen}
                   aria-label={f.q}
@@ -511,13 +533,13 @@ function FAQ() {
           })}
         </div>
       </div>
-    </section>
+    </SectionView>
   );
 }
 
 function FinalCTA() {
   return (
-    <section className="bg-black py-20 text-white md:py-28">
+    <SectionView id="final-cta" as="section" className="bg-black py-20 text-white md:py-28">
       <div className="mx-auto max-w-3xl px-5 text-center md:px-8">
         <motion.h2 {...fadeUp} className="text-3xl font-extrabold tracking-tight md:text-5xl">
           همین حالا خیالت از سرویس خودروت راحت بشه
@@ -536,6 +558,6 @@ function FinalCTA() {
           </Link>
         </motion.div>
       </div>
-    </section>
+    </SectionView>
   );
 }

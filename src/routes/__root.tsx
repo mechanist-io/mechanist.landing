@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { AnalyticsRuntime } from "../components/site/AnalyticsRuntime";
+import { trackJsError } from "../lib/analytics";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -39,6 +41,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    trackJsError(error.message || "root_error", "tanstack_root_error_component");
   }, [error]);
 
   return (
@@ -131,6 +134,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
+      <AnalyticsRuntime />
       <Outlet />
     </QueryClientProvider>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, Droplet, Gauge, Minus, Plus, Wrench } from "lucide-react";
+import { MockupView, SectionView } from "@/components/site/AnalyticsRuntime";
 
 const PARTS = [
   { icon: Droplet, name: "تعویض روغن موتور", km: "۵٬۰۰۰", months: "۶ ماه" },
@@ -341,7 +342,11 @@ function Phone3D() {
 
 export function CustomizeParts() {
   return (
-    <section className="overflow-hidden border-b border-gray-100 bg-white py-20 md:py-28">
+    <SectionView
+      id="customize-parts"
+      as="section"
+      className="overflow-hidden border-b border-gray-100 bg-white py-20 md:py-28"
+    >
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 md:grid-cols-2 md:gap-16 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -377,9 +382,11 @@ export function CustomizeParts() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Phone3D />
+          <MockupView id="customize-parts">
+            <Phone3D />
+          </MockupView>
         </motion.div>
       </div>
-    </section>
+    </SectionView>
   );
 }

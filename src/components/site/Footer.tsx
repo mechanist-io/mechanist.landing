@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { trackDownloadCtaClick } from "@/lib/analytics";
+import { trackDownloadCtaClick, trackNavClick } from "@/lib/analytics";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -19,7 +19,7 @@ export function Footer() {
           <h3 className="mb-4 text-sm font-semibold text-white">لینک‌ها</h3>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>
-              <Link to="/" className="hover:text-white">
+              <Link to="/" onClick={() => trackNavClick("home", "footer")} className="hover:text-white">
                 صفحه اصلی
               </Link>
             </li>
@@ -33,7 +33,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a href="/#faq" className="hover:text-white">
+              <a
+                href="/#faq"
+                onClick={() => trackNavClick("faq", "footer")}
+                className="hover:text-white"
+              >
                 سوالات متداول
               </a>
             </li>

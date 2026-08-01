@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { trackDownloadCtaClick } from "@/lib/analytics";
+import { trackDownloadCtaClick, trackNavClick } from "@/lib/analytics";
 import { Logo } from "./Logo";
 
 const navLinks = [
-  { href: "#how-it-works", label: "چطور کار می‌کند" },
-  { href: "#features", label: "ویژگی‌ها" },
-  { href: "#faq", label: "سوالات متداول" },
-];
+  { href: "#how-it-works", label: "چطور کار می‌کند", target: "how-it-works" },
+  { href: "#features", label: "ویژگی‌ها", target: "features" },
+  { href: "#faq", label: "سوالات متداول", target: "faq" },
+] as const;
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -37,6 +37,7 @@ export function Header() {
             <a
               key={l.href}
               href={l.href}
+              onClick={() => trackNavClick(l.target, "header")}
               className="text-sm font-medium text-gray-600 transition-colors hover:text-black"
             >
               {l.label}
@@ -71,7 +72,10 @@ export function Header() {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  trackNavClick(l.target, "header_mobile");
+                  setOpen(false);
+                }}
                 className="rounded-lg px-3 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-black"
               >
                 {l.label}

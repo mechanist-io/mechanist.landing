@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Bot, SendHorizontal, Sparkles } from "lucide-react";
+import { MockupView, SectionView } from "@/components/site/AnalyticsRuntime";
 
 type ChatMessage = {
   id: number;
@@ -341,7 +342,11 @@ function AiChatPhone() {
 
 export function AiAssistantShowcase() {
   return (
-    <section className="overflow-hidden border-y border-gray-100 bg-gray-50 py-20 md:py-28">
+    <SectionView
+      id="ai-assistant"
+      as="section"
+      className="overflow-hidden border-y border-gray-100 bg-gray-50 py-20 md:py-28"
+    >
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 md:grid-cols-2 md:gap-16 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -380,9 +385,11 @@ export function AiAssistantShowcase() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <AiChatPhone />
+          <MockupView id="ai-assistant">
+            <AiChatPhone />
+          </MockupView>
         </motion.div>
       </div>
-    </section>
+    </SectionView>
   );
 }
