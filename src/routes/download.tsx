@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Check, Loader2, AlertCircle, Globe } from "lucide-react";
+import { Check, Loader2, AlertCircle, Globe, Lock, ShieldCheck } from "lucide-react";
 
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -21,6 +21,13 @@ import {
   trackDownloadVpnRetry,
 } from "@/lib/analytics";
 import { checkIranIp, type IpCheckResult } from "@/lib/ip-check";
+import {
+  FREE_SEATS_TOTAL,
+  REGISTERED_COUNT,
+  REMAINING_FREE_SEATS,
+  faNumber,
+} from "@/lib/free-seats";
+import { CountUp } from "@/components/site/CountUp";
 
 export const Route = createFileRoute("/download")({
   head: () => ({
@@ -48,6 +55,61 @@ type GeoStatus = "checking" | IpCheckResult["status"];
 
 const phoneRe = /^09\d{9}$/;
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function FreeSeatsBanner() {
+  const filled = Math.min(100, (REGISTERED_COUNT / FREE_SEATS_TOTAL) * 100);
+  return (
+    <div className="rounded-2xl border border-[color:var(--brand-orange)]/25 bg-[color:var(--brand-orange-light)] px-4 py-3.5 text-start">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-bold text-[color:var(--brand-orange)]">
+          حساب رایگان مادام‌العمر
+        </p>
+        <p className="text-[11px] font-semibold text-gray-600">
+          {faNumber(REGISTERED_COUNT)} از {faNumber(FREE_SEATS_TOTAL)} نفر
+        </p>
+      </div>
+      <p className="mt-1.5 text-sm font-extrabold text-gray-900">
+        فقط{" "}
+        <CountUp
+          from={FREE_SEATS_TOTAL}
+          to={REMAINING_FREE_SEATS}
+          duration={1.4}
+          className="tabular-nums text-[color:var(--brand-orange)]"
+        />{" "}
+        نفر دیگر می‌تونن مکانیست رو برای همیشه رایگان بگیرن
+      </p>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/80">
+        <motion.div
+          className="h-full rounded-full bg-[color:var(--brand-orange)]"
+          initial={{ width: 0 }}
+          animate={{ width: `${filled}%` }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TrustNotes() {
+  return (
+    <div className="mt-5 space-y-2.5 text-start">
+      <div className="flex gap-2.5 text-xs leading-6 text-gray-600">
+        <ShieldCheck size={16} className="mt-0.5 shrink-0 text-[color:var(--brand-success)]" />
+        <p>
+          تعهد ما: از شماره‌ات برای تبلیغات، پیامک تبلیغاتی یا فروش به دیگران استفاده
+          نمی‌کنیم. امنیت اطلاعاتت اولویت اول ماست.
+        </p>
+      </div>
+      <div className="flex gap-2.5 text-xs leading-6 text-gray-600">
+        <Lock size={16} className="mt-0.5 shrink-0 text-gray-500" />
+        <p>
+          شماره یا ایمیل فقط برای ارسال لینک ثبت‌نام ذخیره می‌شه؛ دیتابیس ما رمزنگاری‌شده
+          (encrypted) است و سرورها فعلاً داخل ایران قرار دارن.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function DownloadPage() {
   const [value, setValue] = useState("");
@@ -141,11 +203,12 @@ function DownloadPage() {
                   <Check size={28} className="text-[color:var(--brand-success)]" />
                 </div>
                 <h1 className="mt-5 text-2xl font-extrabold tracking-tight">
-                  در لیست انتظار ثبت‌نام کردی
+                  جای رایگان‌ت رزرو شد
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  مکانیست هنوز منتشر نشده — ولی جای تو رو نگه داشتیم. تا چند روز دیگه منتشر می‌شه و
-                  لینک دانلود رو برات می‌فرستیم. همراه ما بمون!
+                  یکی از {faNumber(FREE_SEATS_TOTAL)} حساب مادام‌العمر رایگان مال توئه. به‌محض
+                  انتشار، لینک ثبت‌نام رو برات می‌فرستیم — بدون تبلیغات و بدون اشتراک‌گذاری
+                  شماره‌ات.
                 </p>
               </div>
             ) : geoStatus === "checking" ? (
@@ -163,10 +226,13 @@ function DownloadPage() {
                 </div>
                 <h1 className="mt-5 text-2xl font-extrabold tracking-tight">VPN رو خاموش کن</h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  به نظر می‌رسه از خارج از ایران
-                  {blockedCountry ? ` (${blockedCountry})` : ""} یا با VPN وصل شدی. برای ثبت‌نام،
-                  VPN رو خاموش کن و دوباره امتحان کن.
+                  سرورهای مکانیست فعلاً داخل ایران هستن؛ به‌خاطر همین اگه از خارج از ایران
+                  {blockedCountry ? ` (${blockedCountry})` : ""} یا با VPN وصل باشی، ثبت‌نام ممکن
+                  نیست. لطفاً یک لحظه VPN رو خاموش کن و دوباره امتحان کن.
                 </p>
+                <div className="mt-5">
+                  <FreeSeatsBanner />
+                </div>
                 <button
                   type="button"
                   onClick={() => runGeoCheck(true)}
@@ -174,14 +240,20 @@ function DownloadPage() {
                 >
                   دوباره امتحان کن
                 </button>
+                <p className="mt-4 text-xs leading-6 text-gray-500">
+                  به‌زودی سرویس رو برای دسترسی جهانی هم آماده می‌کنیم تا بدون خاموش کردن VPN هم
+                  بتونی ثبت‌نام کنی.
+                </p>
               </div>
             ) : (
               <>
-                <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                  دریافت اپلیکیشن
+                <FreeSeatsBanner />
+                <h1 className="mt-5 text-2xl font-extrabold tracking-tight md:text-3xl">
+                  جای رایگان خودت رو رزرو کن
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-gray-600">
-                  ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود برات ارسال بشه.
+                  ایمیل یا شماره موبایلت رو وارد کن تا لینک ثبت‌نام و دسترسی زودهنگام برات ارسال
+                  بشه.
                 </p>
 
                 {status === "error" && (
@@ -249,10 +321,12 @@ function DownloadPage() {
                         در حال ارسال...
                       </>
                     ) : (
-                      "ارسال لینک"
+                      "رزرو حساب رایگان مادام‌العمر"
                     )}
                   </button>
                 </form>
+
+                <TrustNotes />
               </>
             )}
           </div>

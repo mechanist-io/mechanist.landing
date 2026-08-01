@@ -1,10 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
-export function CountUp({ to, duration = 1.6, prefix = "", suffix = "" }: { to: number; duration?: number; prefix?: string; suffix?: string }) {
+export function CountUp({
+  to,
+  from = 0,
+  duration = 1.6,
+  prefix = "",
+  suffix = "",
+  className,
+}: {
+  to: number;
+  from?: number;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+  className?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  const [val, setVal] = useState(0);
+  const [val, setVal] = useState(from);
 
   useEffect(() => {
     if (!inView) return;
@@ -13,15 +27,15 @@ export function CountUp({ to, duration = 1.6, prefix = "", suffix = "" }: { to: 
     const tick = (t: number) => {
       const p = Math.min((t - start) / (duration * 1000), 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(to * eased));
+      setVal(Math.round(from + (to - from) * eased));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to, duration]);
+  }, [inView, to, from, duration]);
 
   return (
-    <span ref={ref}>
+    <span ref={ref} className={className}>
       {prefix}
       {val.toLocaleString("fa-IR")}
       {suffix}

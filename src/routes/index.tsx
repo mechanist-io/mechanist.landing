@@ -25,6 +25,7 @@ import { AiAssistantShowcase } from "@/components/site/AiAssistantShowcase";
 import { CountUp, ProgressBar } from "@/components/site/CountUp";
 import { MockupView, SectionView } from "@/components/site/AnalyticsRuntime";
 import { trackDownloadCtaClick, trackFaqOpen, trackHeroCtaSecondary } from "@/lib/analytics";
+import { REMAINING_FREE_SEATS, faNumber } from "@/lib/free-seats";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -130,7 +131,7 @@ function Hero() {
             </a>
           </div>
           <p className="mt-4 text-sm font-medium text-gray-500">
-            ۵۰۰ کاربر اول، مادام‌العمر رایگان
+            فقط {faNumber(REMAINING_FREE_SEATS)} جای رایگان مادام‌العمر باقی مونده
           </p>
         </motion.div>
 
@@ -391,7 +392,7 @@ function Benefits() {
     {
       icon: Gift,
       t: "۵۰۰ کاربر اول، مادام‌العمر رایگان",
-      d: "۵۰۰ نفر اول مکانیست رو برای همیشه و بدون هزینه اشتراک استفاده می‌کنن — همین الان جای خودت رو رزرو کن.",
+      d: `فقط ${faNumber(REMAINING_FREE_SEATS)} جای رایگان مادام‌العمر باقی مونده — همین الان رزرو کن و برای همیشه بدون اشتراک استفاده کن.`,
     },
     {
       icon: BellRing,
@@ -545,7 +546,8 @@ function FinalCTA() {
           همین حالا خیالت از سرویس خودروت راحت بشه
         </motion.h2>
         <motion.p {...fadeUp} className="mt-5 text-gray-400">
-          مکانیست رو دانلود کن — ۵۰۰ کاربر اول، مادام‌العمر رایگان.
+          مکانیست رو دانلود کن — فقط {faNumber(REMAINING_FREE_SEATS)} جای رایگان مادام‌العمر
+          باقی مونده.
         </motion.p>
         <motion.div {...fadeUp} className="mt-10">
           <Link
