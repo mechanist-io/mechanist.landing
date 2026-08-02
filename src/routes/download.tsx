@@ -9,18 +9,12 @@ import { API_BASE_URL } from "@/lib/api";
 import {
   trackDownloadFormSubmit,
   trackDownloadFormValidationError,
-  trackDownloadGeoAllowed,
-  trackDownloadGeoCheckLatency,
-  trackDownloadGeoUnknown,
   trackDownloadIdentifierType,
   trackDownloadPageView,
   trackDownloadSignupError,
   trackDownloadSignupLatency,
   trackDownloadSignupSuccess,
-  trackDownloadVpnBlocked,
-  trackDownloadVpnRetry,
 } from "@/lib/analytics";
-import { checkIranIp, type IpCheckResult } from "@/lib/ip-check";
 import {
   FREE_SEATS_TOTAL,
   REGISTERED_COUNT,
@@ -36,7 +30,6 @@ export const Route = createFileRoute("/download")({
 });
 
 type Status = "idle" | "loading" | "success" | "error";
-type GeoStatus = "checking" | IpCheckResult["status"];
 
 const phoneRe = /^09\d{9}$/;
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,6 +68,18 @@ function FreeSeatsBanner() {
   );
 }
 
+function VpnNote() {
+  return (
+    <div className="mt-5 flex gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-start">
+      <Globe size={16} className="mt-0.5 shrink-0 text-amber-600" />
+      <p className="text-xs leading-6 text-amber-900">
+        سرورهای مکانیست فعلاً داخل ایران هستن. اگه VPN روشنه، قبل از ثبت‌نام یک لحظه خاموشش کن
+        تا درخواستت درست ارسال بشه.
+      </p>
+    </div>
+  );
+}
+
 function TrustNotes() {
   return (
     <div className="mt-5 space-y-2.5 text-start">
@@ -100,31 +105,9 @@ function DownloadPage() {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [fieldError, setFieldError] = useState<string | null>(null);
-  const [geoStatus, setGeoStatus] = useState<GeoStatus>("checking");
-  const [blockedCountry, setBlockedCountry] = useState<string | undefined>();
-
-  const runGeoCheck = (isRetry = false) => {
-    if (isRetry) trackDownloadVpnRetry();
-    setGeoStatus("checking");
-    const started = performance.now();
-    void checkIranIp().then((result) => {
-      trackDownloadGeoCheckLatency(performance.now() - started);
-      if (result.status === "blocked") {
-        setBlockedCountry(result.country);
-        setGeoStatus("blocked");
-        trackDownloadVpnBlocked(result.country);
-        return;
-      }
-      setBlockedCountry(undefined);
-      setGeoStatus(result.status);
-      if (result.status === "iran") trackDownloadGeoAllowed();
-      else trackDownloadGeoUnknown();
-    });
-  };
 
   useEffect(() => {
     trackDownloadPageView();
-    runGeoCheck(false);
   }, []);
 
   const detect = (v: string): { email?: string; phoneNumber?: string } | null => {
@@ -136,7 +119,6 @@ function DownloadPage() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (geoStatus === "blocked") return;
     const payload = detect(value);
     if (!payload) {
       setFieldError("لطفاً یک ایمیل یا شماره موبایل معتبر وارد کن");
@@ -196,40 +178,6 @@ function DownloadPage() {
                   شماره‌ات.
                 </p>
               </div>
-            ) : geoStatus === "checking" ? (
-              <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gray-100">
-                  <Loader2 size={28} className="animate-spin text-gray-500" />
-                </div>
-                <h1 className="mt-5 text-2xl font-extrabold tracking-tight">لطفاً صبر کن</h1>
-                <p className="mt-3 text-sm leading-7 text-gray-600">در حال بررسی اتصال...</p>
-              </div>
-            ) : geoStatus === "blocked" ? (
-              <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber-50">
-                  <Globe size={28} className="text-amber-600" />
-                </div>
-                <h1 className="mt-5 text-2xl font-extrabold tracking-tight">VPN رو خاموش کن</h1>
-                <p className="mt-3 text-sm leading-7 text-gray-600">
-                  سرورهای مکانیست فعلاً داخل ایران هستن؛ به‌خاطر همین اگه از خارج از ایران
-                  {blockedCountry ? ` (${blockedCountry})` : ""} یا با VPN وصل باشی، ثبت‌نام ممکن
-                  نیست. لطفاً یک لحظه VPN رو خاموش کن و دوباره امتحان کن.
-                </p>
-                <div className="mt-5">
-                  <FreeSeatsBanner />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => runGeoCheck(true)}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50"
-                >
-                  دوباره امتحان کن
-                </button>
-                <p className="mt-4 text-xs leading-6 text-gray-500">
-                  به‌زودی سرویس رو برای دسترسی جهانی هم آماده می‌کنیم تا بدون خاموش کردن VPN هم
-                  بتونی ثبت‌نام کنی.
-                </p>
-              </div>
             ) : (
               <>
                 <FreeSeatsBanner />
@@ -241,13 +189,17 @@ function DownloadPage() {
                   بشه.
                 </p>
 
+                <VpnNote />
+
                 {status === "error" && (
                   <div
                     role="alert"
                     className="mt-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
                   >
                     <AlertCircle size={18} className="mt-0.5 shrink-0" />
-                    <span>مشکلی پیش اومد. لطفاً دوباره تلاش کن.</span>
+                    <span>
+                      مشکلی پیش اومد. اگه VPN روشنه خاموشش کن و دوباره تلاش کن.
+                    </span>
                   </div>
                 )}
 
