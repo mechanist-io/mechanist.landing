@@ -26,40 +26,11 @@ import { CountUp, ProgressBar } from "@/components/site/CountUp";
 import { MockupView, SectionView } from "@/components/site/AnalyticsRuntime";
 import { trackDownloadCtaClick, trackFaqOpen, trackHeroCtaSecondary } from "@/lib/analytics";
 import { REMAINING_FREE_SEATS, faNumber } from "@/lib/free-seats";
+import { faqs } from "@/lib/faqs";
+import { homeSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "مکانیست | دستیار هوشمند سرویس خودرو" },
-      {
-        name: "description",
-        content:
-          "با مکانیست، سرویس‌های خودرو، موتورسیکلت، کامیون و تراکتور خود را بر اساس کیلومتر و زمان به‌طور خودکار پیگیری کنید.",
-      },
-      { property: "og:title", content: "مکانیست | دستیار هوشمند سرویس خودرو" },
-      {
-        property: "og:description",
-        content: "یادآوری هوشمند سرویس خودرو بر اساس کیلومتر و زمان.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:locale", content: "fa_IR" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "مکانیست" },
-      { name: "twitter:description", content: "دستیار هوشمند سرویس خودرو." },
-      {
-        name: "application/ld+json",
-        content: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          name: "مکانیست",
-          applicationCategory: "Auto",
-          operatingSystem: "iOS, Android",
-          description:
-            "مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت، کامیون و تراکتور را به‌طور خودکار پیگیری می‌کند.",
-        }),
-      },
-    ],
-  }),
+  head: () => homeSeo(),
   component: LandingPage,
 });
 
@@ -102,16 +73,13 @@ function Hero() {
             دستیار هوشمند سرویس خودرو
           </div>
           <h1 className="text-4xl font-extrabold leading-[1.15] tracking-tight md:text-6xl">
-            دیگه هیچوقت سرویس ماشینت
+            مکانیست؛ یادآوری هوشمند
             <br />
-            <span className="relative inline-block">
-              یادت نمیره
-              <span className="absolute inset-x-0 -bottom-1 h-3 -z-0 bg-[color:var(--brand-orange-light)]" />
-            </span>
+            سرویس خودرو
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-            مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت، کامیون یا تراکتور شما رو
-            به‌طور خودکار بر اساس عمر هر قطعه پیگیری می‌کنه — دقیق، ساده و همیشه به‌روز.
+            دیگه هیچوقت سرویس ماشینت یادت نمیره. مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو،
+            موتورسیکلت، کامیون یا تراکتور شما رو به‌طور خودکار پیگیری می‌کنه — دقیق، ساده و همیشه به‌روز.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
@@ -464,29 +432,6 @@ function Screenshots() {
     </SectionView>
   );
 }
-
-const faqs = [
-  {
-    q: "مکانیست چطور برنامه سرویس خودروی من رو می‌دونه؟",
-    a: "مکانیست از پایگاه داده‌ای شامل هزاران مدل خودرو استفاده می‌کنه که برنامه سرویس استاندارد هر کدوم از قبل توش تعریف شده. کافیه برند، مدل و سال خودروت رو انتخاب کنی.",
-  },
-  {
-    q: "می‌تونم چند تا خودرو رو هم‌زمان مدیریت کنم؟",
-    a: "بله، می‌تونی هر تعداد خودرو، موتورسیکلت، کامیون یا تراکتور که داری رو در مکانیست اضافه کنی و همه رو جداگانه پیگیری کنی.",
-  },
-  {
-    q: "آیا از موتورسیکلت هم پشتیبانی می‌کنه؟",
-    a: "بله، مکانیست علاوه بر خودرو، از موتورسیکلت، کامیون، تراکتور و ماشین‌آلات سنگین هم پشتیبانی می‌کنه.",
-  },
-  {
-    q: "آیا مکانیست بدون اینترنت هم کار می‌کنه؟",
-    a: "اطلاعات خودرو و سرویس‌ها روی گوشی شما ذخیره می‌شه و می‌تونی بدون اینترنت هم به اونا دسترسی داشته باشی. برای همگام‌سازی و به‌روزرسانی به اتصال اینترنت نیاز داری.",
-  },
-  {
-    q: "یادآوری‌ها چطور محاسبه می‌شن؟",
-    a: "هر آیتم سرویس بر اساس دو معیار کیلومتر و زمان بررسی می‌شه. هر کدوم زودتر به آستانه تعیین‌شده برسه، مکانیست بهت یادآوری می‌کنه.",
-  },
-];
 
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);

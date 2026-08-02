@@ -28,25 +28,10 @@ import {
   faNumber,
 } from "@/lib/free-seats";
 import { CountUp } from "@/components/site/CountUp";
+import { downloadSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/download")({
-  head: () => ({
-    meta: [
-      { title: "دریافت اپلیکیشن مکانیست" },
-      {
-        name: "description",
-        content: "ایمیل یا شماره موبایلت رو وارد کن تا لینک دانلود مکانیست برات ارسال بشه.",
-      },
-      { property: "og:title", content: "دریافت اپلیکیشن مکانیست" },
-      {
-        property: "og:description",
-        content: "لینک دانلود اپلیکیشن مکانیست را با ایمیل یا پیامک دریافت کنید.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:locale", content: "fa_IR" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: () => downloadSeo(),
   component: DownloadPage,
 });
 

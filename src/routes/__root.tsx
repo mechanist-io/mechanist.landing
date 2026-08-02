@@ -78,15 +78,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "مکانیست | دستیار هوشمند سرویس خودرو" },
+      { name: "theme-color", content: "#ff8c00" },
+      { title: "مکانیست | یادآوری هوشمند سرویس خودرو بر اساس کیلومتر و زمان" },
       {
         name: "description",
         content:
-          "مکانیست بر اساس کیلومتر و زمان، سرویس‌های خودرو، موتورسیکلت، کامیون و تراکتور شما را به‌طور خودکار پیگیری می‌کند.",
+          "با مکانیست سرویس‌های خودرو، موتورسیکلت، کامیون و تراکتور را بر اساس کیلومتر و زمان به‌طور خودکار پیگیری کنید.",
       },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "fa_IR" },
+      { property: "og:site_name", content: "مکانیست" },
+      { property: "og:image", content: "https://mechanist.ir/og.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://mechanist.ir/og.jpg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
